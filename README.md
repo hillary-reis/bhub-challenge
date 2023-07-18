@@ -16,8 +16,8 @@ rodando cada comando
 ```bash
 cd src/
 
-pyenv shell 3.11.4
-poetry env use 3.11.4
+pyenv shell 3.11.1
+poetry env use 3.11.1
 
 poetry shell
 ```
