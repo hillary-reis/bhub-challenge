@@ -71,5 +71,30 @@ async def customers_get_by_uuid(
                             content={'title': 'Internal error', 'detail': 'Error while get customer'})
 
 
+@router.patch('/v1/customers/{customer_uuid}', tags=['customers'], status_code=status.HTTP_200_OK)
+@inject
+async def customers_update_by_uuid(
+    request: Request, customer_uuid: str, schema: CustomersUpdatePayload,
+    customers_update_by_uuid_use_case: CustomersUpdateByUuidUseCase = Depends(Provide[
+        Container.customers_update_by_uuid_use_case]),
+    logger: Logger = Depends(Provide[Container.logger])
+) -> dict:
+    try:
+        tracking_id = request.headers.get('requestId', str(uuid4()))
+        logger.info(f'[{tracking_id}] starting get customer {customer_uuid}')
+
+        await customers_update_by_uuid_use_case.run(tracking_id=tracking_id, customer_uuid=customer_uuid, schema=schema)
+
+        return JSONResponse(status_code=status.HTTP_200_OK, content={'message': 'Customer successfully updated'})
+
+    except CustomerNotFoundException as exception:
+        logger.exception(f'[{tracking_id}] Customer not found: {exception.args[0]}')
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={'title': exception.args[0]['title'], 'detail': exception.args[0]['detail']})
+
+    except Exception as exception:
+        logger.exception(f'[{tracking_id}] Error while update customer: {exception.args}')
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={'title': 'Internal error', 'detail': 'Error while update customer'})
 def configure(app: FastAPI):
     app.include_router(router)
