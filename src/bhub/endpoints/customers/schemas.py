@@ -33,3 +33,22 @@ class CustomersPayload(BaseModel):
     def convert_decimal_to_int(cls, billing):
         return int(billing * 100)
 
+
+class CustomerResponse(BaseModel):
+    uuid: str
+    created_at: str
+    company_name: str
+    phone_number: str
+    address: str
+    billing: float
+
+    @validator('billing', pre=True)
+    def convert_int_to_float(cls, billing):
+        return round(float(billing / 100), 2)
+
+    @validator('created_at', pre=True)
+    def convert_datetime_to_str(cls, created_at):
+        return created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+    class Config:
+        orm_mode = True
