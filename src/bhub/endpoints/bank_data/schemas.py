@@ -17,3 +17,10 @@ class BankDataPayload(BaseModel):
 class BankDataCreatePayload(BankDataPayload):
     customer_uuid: str
 
+
+_patch_fields_bank_data = BankDataPayload.__fields__.keys()
+
+
+class BankDataUpdatePayload(BankDataPayload, optional_fields=_patch_fields_bank_data):
+    pass
+
