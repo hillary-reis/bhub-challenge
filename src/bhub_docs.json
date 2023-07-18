@@ -1,0 +1,890 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Api de Clientes da Bhub",
+    "version": "1.0"
+  },
+  "components": {
+    "schemas": {
+      "request_bank_data_create_payload": {
+        "properties": {
+          "agency": {
+            "description": "Número da agencia bancária",
+            "example": "0001",
+            "maxLength": 5,
+            "type": "string"
+          },
+          "account": {
+            "description": "Numero da conta bancária",
+            "example": "000000001",
+            "maxLength": 9,
+            "type": "string"
+          },
+          "bank": {
+            "description": "Nome do banco",
+            "example": "nubank",
+            "maxLength": 50,
+            "type": "string"
+          },
+          "customer_uuid": {
+            "description": "UUID de referencia do cliente",
+            "example": "ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823",
+            "maxLength": 36,
+            "type": "string"
+          }
+        },
+        "required": [
+          "agency",
+          "account",
+          "bank",
+          "customer_uuid"
+        ],
+        "type": "object"
+      },
+      "request_bank_data_update_payload": {
+        "properties": {
+          "agency": {
+            "description": "Número da agencia bancária",
+            "example": "0001",
+            "maxLength": 5,
+            "type": "string"
+          },
+          "account": {
+            "description": "Numero da conta bancária",
+            "example": "000000001",
+            "maxLength": 9,
+            "type": "string"
+          },
+          "bank": {
+            "description": "Nome do banco",
+            "example": "nubank",
+            "maxLength": 50,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "response_bank_data_content_201_or_200": {
+        "properties": {
+          "uuid": {
+            "description": "UUID gerado de referencia no banco",
+            "example": "bb0e1a57-6f16-410c-89c4-6b18888810d3",
+            "maxLength": 36,
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Data de criação do registro",
+            "example": "2023-05-08T20:41:02.635Z",
+            "type": "string"
+          },
+          "agency": {
+            "description": "Número da agencia bancária",
+            "example": "0001",
+            "maxLength": 5,
+            "type": "string"
+          },
+          "account": {
+            "description": "Numero da conta bancária",
+            "example": "000000001",
+            "maxLength": 9,
+            "type": "string"
+          },
+          "bank": {
+            "description": "Nome do banco",
+            "example": "nubank",
+            "maxLength": 50,
+            "type": "string"
+          },
+          "customer_uuid": {
+            "description": "UUID de referencia do cliente no banco",
+            "example": "ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823",
+            "maxLength": 36,
+            "type": "string"
+          }
+        }
+      },
+      "response_bank_data_update_content_200": {
+        "properties": {
+          "message": {
+            "description": "Mensagem de sucesso",
+            "example": "Bank data successfully updated"
+          }
+        }
+      },
+      "response_bank_data_delete_content_200": {
+        "properties": {
+          "message": {
+            "description": "Mensagem de sucesso",
+            "example": "Bank data successfully deleted"
+          }
+        }
+      },
+      "response_bank_data_content_404": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Bank data not found"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Bank data bb0e1a57-6f16-410c-89c4-6b18888810d3 does not exists"
+          }
+        }
+      },
+      "response_bank_data_content_409": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Bank data already exists"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Bank data already exists with this bank"
+          }
+        }
+      },
+      "response_bank_data_create_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while create bank data"
+          }
+        }
+      },
+      "response_bank_data_get_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while get bank data"
+          }
+        }
+      },
+      "response_bank_data_update_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while update bank data"
+          }
+        }
+      },
+      "response_bank_data_delete_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while delete bank data"
+          }
+        }
+      },
+      "request_customers_create_payload": {
+        "properties": {
+          "company_name": {
+            "description": "Razão social da empresa",
+            "example": "ABS Contabil",
+            "type": "string"
+          },
+          "phone_number": {
+            "description": "Numero de telefone",
+            "example": "11979670475",
+            "maxLength": 15,
+            "type": "string"
+          },
+          "address": {
+            "description": "Endereço",
+            "example": "Av Nações Unidas, 123",
+            "type": "string"
+          },
+          "billing": {
+            "description": "Faturamento mensal",
+            "example": 10000.54,
+            "type": "number"
+          }
+        },
+        "required": [
+          "company_name",
+          "phone_number",
+          "address",
+          "billing"
+        ],
+        "type": "object"
+      },
+      "request_customers_update_payload": {
+        "properties": {
+          "company_name": {
+            "description": "Razão social da empresa",
+            "example": "ABS Contabil",
+            "type": "string"
+          },
+          "phone_number": {
+            "description": "Numero de telefone",
+            "example": "11979670475",
+            "maxLength": 15,
+            "type": "string"
+          },
+          "address": {
+            "description": "Endereço",
+            "example": "Av Nações Unidas, 123",
+            "type": "string"
+          },
+          "billing": {
+            "description": "Faturamento mensal",
+            "example": 10000.54,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "response_customers_content_201_or_200": {
+        "properties": {
+          "uuid": {
+            "description": "UUID gerado de referencia no banco",
+            "example": "ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823",
+            "maxLength": 36,
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Data de criação do registro",
+            "example": "2023-05-08T20:41:02.635Z",
+            "type": "string"
+          },
+          "company_name": {
+            "description": "Razão social da empresa",
+            "example": "ABS Contabil",
+            "type": "string"
+          },
+          "phone_number": {
+            "description": "Numero de telefone",
+            "example": "11979670475",
+            "maxLength": 15,
+            "type": "string"
+          },
+          "address": {
+            "description": "Endereço",
+            "example": "Av Nações Unidas, 123",
+            "type": "string"
+          },
+          "billing": {
+            "description": "Faturamento mensal",
+            "example": 10000.54,
+            "type": "number"
+          }
+        }
+      },
+      "response_customers_update_content_200": {
+        "properties": {
+          "message": {
+            "description": "Mensagem de sucesso",
+            "example": "Customer successfully updated"
+          }
+        }
+      },
+      "response_customers_delete_content_200": {
+        "properties": {
+          "message": {
+            "description": "Mensagem de sucesso",
+            "example": "Customer successfully deleted"
+          }
+        }
+      },
+      "response_customer_content_404": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Customer not found"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Customer ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823 does not exists"
+          }
+        }
+      },
+      "response_customers_content_409": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Customer already exists"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Customer already exists with this company name"
+          }
+        }
+      },
+      "response_customers_create_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while create customer"
+          }
+        }
+      },
+      "response_customers_get_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while get customer"
+          }
+        }
+      },
+      "response_customers_update_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while update customer"
+          }
+        }
+      },
+      "response_customers_delete_content_500": {
+        "properties": {
+          "title": {
+            "description": "Título do erro",
+            "example": "Internal error"
+          },
+          "detail": {
+            "description": "Detalhamento do erro",
+            "example": "Error while delete customer"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/v1/bank-data": {
+      "post": {
+        "description": "Este serviço cria um registro dos dados bancários de um determinado cliente.",
+        "summary": "Criar um dado bancário",
+        "tags": ["Dados Bancários"],
+        "parameters": [
+          {
+            "description": "Usado para fazer o rastreio interno da requisição",
+            "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+            "in": "header",
+            "name": "requestId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/request_bank_data_create_payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Registro bancário criado com Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_content_201_or_200"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cliente não achado no banco",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_customer_content_404"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Dados bancários já cadastrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_content_409"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_create_content_500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bank-data/{bank_data_uuid}": {
+      "get": {
+        "description": "Este serviço obtém os detalhes de registro dos dados bancários de um determinado cliente por meio do \"bank_data_uuid\"",
+        "summary": "Consultar um dado bancário",
+        "tags": ["Dados Bancários"],
+        "parameters": [
+          {
+            "description": "Usado para fazer o rastreio interno da requisição",
+            "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+            "in": "header",
+            "name": "requestId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ID do registro retornado na resposta do POST /v1/bank-data",
+            "example": "bb0e1a57-6f16-410c-89c4-6b18888810d3",
+            "in": "path",
+            "name": "bank_data_uuid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_content_201_or_200"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado no banco",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_content_404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_get_content_500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Este serviço atualiza um registro dos dados bancários de um determinado cliente por meio do \"bank_data_uuid\"",
+        "summary": "Deletar um dado bancário",
+        "tags": ["Dados Bancários"],
+        "parameters": [
+          {
+            "description": "Usado para fazer o rastreio interno da requisição",
+            "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+            "in": "header",
+            "name": "requestId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ID do registro retornado na resposta do POST /v1/bank-data",
+            "example": "bb0e1a57-6f16-410c-89c4-6b18888810d3",
+            "in": "path",
+            "name": "bank_data_uuid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/request_bank_data_update_payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Registro atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_update_content_200"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado no banco",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_content_404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_update_content_500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Este serviço delete um registro dos dados bancários de um determinado cliente por meio do \"bank_data_uuid\"",
+        "summary": "Deletar um dado bancário",
+        "tags": ["Dados Bancários"],
+        "parameters": [
+          {
+            "description": "Usado para fazer o rastreio interno da requisição",
+            "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+            "in": "header",
+            "name": "requestId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ID do registro retornado na resposta do POST /v1/bank-data",
+            "example": "bb0e1a57-6f16-410c-89c4-6b18888810d3",
+            "in": "path",
+            "name": "bank_data_uuid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_delete_content_200"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado no banco",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_content_404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_bank_data_delete_content_500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers": {
+      "post": {
+        "description": "Este serviço cria um cliente.",
+        "summary": "Criar um cliente",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "description": "Usado para fazer o rastreio interno da requisição",
+            "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+            "in": "header",
+            "name": "requestId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/request_customers_create_payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente criado com Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_customers_content_201_or_200"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Cliente já cadastrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_customers_content_409"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response_customers_create_content_500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/{customer_uuid}": {
+      "get": {
+          "description": "Este serviço obtém os detalhes de um cliente por meio do \"customer_uuid\"",
+          "summary": "Consultar um cliente",
+          "tags": ["Clientes"],
+          "parameters": [
+            {
+              "description": "Usado para fazer o rastreio interno da requisição",
+              "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+              "in": "header",
+              "name": "requestId",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "description": "ID do registro retornado na resposta do POST /v1/customers",
+              "example": "ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823",
+              "in": "path",
+              "name": "customer_uuid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Registro encontrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customers_content_201_or_200"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Registro não encontrado no banco",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customer_content_404"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customers_get_content_500"
+                  }
+                }
+              }
+            }
+          }
+      },
+      "patch": {
+          "description": "Este serviço atualiza um cliente por meio do \"customer_uuid\"",
+          "summary": "Atualizar um cliente",
+          "tags": ["Clientes"],
+          "parameters": [
+            {
+              "description": "Usado para fazer o rastreio interno da requisição",
+              "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+              "in": "header",
+              "name": "requestId",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "description": "ID do registro retornado na resposta do POST /v1/customers",
+              "example": "ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823",
+              "in": "path",
+              "name": "customer_uuid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request_customers_update_payload"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Registro atualizado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customers_update_content_200"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Registro não encontrado no banco",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customer_content_404"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customers_update_content_500"
+                  }
+                }
+              }
+            }
+          }
+      },
+      "delete": {
+          "description": "Este serviço delete um cliente por meio do \"customer_uuid\"",
+          "summary": "Deletar um cliente",
+          "tags": ["Clientes"],
+          "parameters": [
+            {
+              "description": "Usado para fazer o rastreio interno da requisição",
+              "example": "20bdaf26-3b0a-4f81-919c-ac8fb6618f7f",
+              "in": "header",
+              "name": "requestId",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "description": "ID do registro retornado na resposta do POST /v1/customers",
+              "example": "ec72ab8c-c0e7-4a58-b08a-17cd8bbc3823",
+              "in": "path",
+              "name": "customer_uuid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Registro deletado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customers_delete_content_200"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Registro não encontrado no banco",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customer_content_404"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/response_customers_delete_content_500"
+                  }
+                }
+              }
+            }
+          }
+      }
+    }
+  }
+}
