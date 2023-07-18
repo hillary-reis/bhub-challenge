@@ -59,3 +59,7 @@ class CustomerResponse(BaseModel):
 
 class CustomersCreateResponse(CustomerResponse):
     pass
+
+
+class CustomersGetByUuidResponse(CustomerResponse):
+    pass
