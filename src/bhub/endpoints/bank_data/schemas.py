@@ -13,3 +13,7 @@ class BankDataPayload(BaseModel):
             cls.__fields__[field].outer_type_ = Optional
             cls.__fields__[field].required = False
 
+
+class BankDataCreatePayload(BankDataPayload):
+    customer_uuid: str
+
