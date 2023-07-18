@@ -37,6 +37,14 @@ class CustomersPayload(BaseModel):
 class CustomersCreatePayload(CustomersPayload):
     pass
 
+
+_patch_fields_customers = CustomersPayload.__fields__.keys()
+
+
+class CustomersUpdatePayload(CustomersPayload, optional_fields=_patch_fields_customers):
+    pass
+
+
 class CustomerResponse(BaseModel):
     uuid: str
     created_at: str
