@@ -52,6 +52,29 @@ async def bank_data_create(
                             content={'title': 'Internal error', 'detail': 'Error while create bank data'})
 
 
+@router.get('/v1/bank-data/{bank_data_uuid}', tags=['bank-data'], status_code=status.HTTP_200_OK)
+@inject
+async def bank_data_get_by_uuid(
+    request: Request, bank_data_uuid: str,
+    bank_data_get_by_uuid_use_case: BankDataGetByUuidUseCase = Depends(Provide[
+        Container.bank_data_get_by_uuid_use_case]),
+    logger: Logger = Depends(Provide[Container.logger])
+) -> BankDataGetByUuidResponse:
+    try:
+        tracking_id = request.headers.get('requestId', str(uuid4()))
+        logger.info(f'[{tracking_id}] starting get bank data {bank_data_uuid}')
+
+        return await bank_data_get_by_uuid_use_case.run(tracking_id=tracking_id, bank_data_uuid=bank_data_uuid)
+
+    except BankDataNotFoundException as exception:
+        logger.exception(f'[{tracking_id}] Bank data not found: {exception.args[0]}')
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={'title': exception.args[0]['title'], 'detail': exception.args[0]['detail']})
+
+    except Exception as exception:
+        logger.exception(f'[{tracking_id}] Error while get bank data: {exception.args}')
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={'title': 'Internal error', 'detail': 'Error while get bank data'})
 
 def configure(app: FastAPI):
     app.include_router(router)
