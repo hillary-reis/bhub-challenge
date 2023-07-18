@@ -34,6 +34,9 @@ class CustomersPayload(BaseModel):
         return int(billing * 100)
 
 
+class CustomersCreatePayload(CustomersPayload):
+    pass
+
 class CustomerResponse(BaseModel):
     uuid: str
     created_at: str
@@ -52,3 +55,7 @@ class CustomerResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class CustomersCreateResponse(CustomerResponse):
+    pass
