@@ -24,3 +24,18 @@ _patch_fields_bank_data = BankDataPayload.__fields__.keys()
 class BankDataUpdatePayload(BankDataPayload, optional_fields=_patch_fields_bank_data):
     pass
 
+
+class BankDataResponse(BaseModel):
+    uuid: str
+    created_at: str
+    agency: str
+    account: str
+    bank: str
+    customer_uuid: str
+
+    @validator('created_at', pre=True)
+    def convert_datetime_to_str(cls, created_at):
+        return created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+    class Config:
+        orm_mode = True
