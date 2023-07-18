@@ -45,3 +45,5 @@ class BankDataCreateResponse(BankDataResponse):
     pass
 
 
+class BankDataGetByUuidResponse(BankDataResponse):
+    pass
