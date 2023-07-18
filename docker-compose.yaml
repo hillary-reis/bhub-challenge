@@ -1,0 +1,27 @@
+version: "3"
+services:    
+  api:
+    image: "bhub_api_challenge_image:local_latest" 
+    
+    build: .
+
+    ports:
+      - 8080:8080
+
+    environment:
+      - ASYNC_POSTGRES_DATABASE_URL=postgresql+asyncpg://bhub:bhub@database:5432/bhub
+      
+    depends_on:
+      - database
+
+  database:
+    image: postgres:14.1
+
+    environment:
+      - POSTGRES_PASSWORD=bhub
+      - POSTGRES_USER=bhub
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=bhub
+
+    ports:
+      - 5432:5432
